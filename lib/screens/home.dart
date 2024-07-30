@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:todo_app/constants/color.dart';
+import 'package:todo_app/constants/tasktype.dart';
+import 'package:todo_app/model/task.dart';
 import 'package:todo_app/screens/add_new_task.dart';
 import 'package:todo_app/todoItem.dart';
 
@@ -12,8 +14,50 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> todo = ["Study Lessons", "Run 5K", "Go to party"];
-  List<String> completed = ["Game meetup", "Take out trash"];
+  List<Task> todo = [
+    Task(
+      type: TaskType.calendar,
+      title: "Study Lessons",
+      description: "Study COMP-117 lessons",
+      isCompleted: false,
+    ),
+    Task(
+      type: TaskType.note,
+      title: "Run 5K",
+      description: "Run 5K for today",
+      isCompleted: false,
+    ),
+    Task(
+      type: TaskType.contest,
+      title: "Go to party",
+      description: "Attend to the party",
+      isCompleted: false,
+    ),
+  ];
+
+  void addNewTask(Task newTask) {
+    setState(() {
+      todo.add(newTask);
+    });
+  }
+
+  //List<String> completed = ["Game meetup", "Take out trash"];
+
+  List<Task> completed = [
+    Task(
+      type: TaskType.calendar,
+      title: "Game meetup",
+      description: "Game meetup at COMP-117 lessons",
+      isCompleted: false,
+    ),
+    Task(
+      type: TaskType.note,
+      title: "Take out trash",
+      description: "Take out trash for today",
+      isCompleted: false,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -74,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: todo.length,
                       itemBuilder: (context, index) {
                         return TodoItem(
-                          title: todo[index],
+                          task: todo[index],
                         );
                       },
                     ),
@@ -106,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: completed.length,
                       itemBuilder: (context, index) {
                         return TodoItem(
-                          title: completed[index],
+                          task: completed[index],
                         );
                       },
                     ),
@@ -118,13 +162,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: HexColor(purbleColor),
                   foregroundColor: Colors.white,
                   //shape: const RoundedRectangleBorder(
-                    //borderRadius:
-                       // BorderRadius.zero, // Köşeleri yuvarlak olmaktan çıkarır
-                 // ),
+                  //borderRadius:
+                  // BorderRadius.zero, // Köşeleri yuvarlak olmaktan çıkarır
+                  // ),
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const AddNewTaskScreen(),
+                    builder: (context) => AddNewTaskScreen(
+                      addNewTask: (newTask) => addNewTask(newTask),
+                    ),
                   ));
                 },
                 child: const Text("Add New Task"),
